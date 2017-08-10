@@ -27,6 +27,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             [Order::HOT_CHOCOLATE, 0, 'H::'],
             [Order::HOT_CHOCOLATE, 1, 'H:1:0'],
             [Order::HOT_CHOCOLATE, 2, 'H:2:0'],
+            [Order::ORANGE_JUICE, 0, 'O::'],
+            [Order::ORANGE_JUICE, 1, 'O::'],
         ];
     }
 
@@ -45,23 +47,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                     Order::SUGAR_MAX_QUANTITY
                 ),
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function generatePriceTestsData()
-    {
-        return [
-            [new Order(Order::TEA), 0, false],
-            [new Order(Order::TEA), -1, false],
-            [new Order(Order::TEA), 2, true],
-            [new Order(Order::COFFEE), 0, false],
-            [new Order(Order::COFFEE), 0.6, true],
-            [new Order(Order::COFFEE), 2, true],
-            [new Order(Order::HOT_CHOCOLATE), 0, false],
-            [new Order(Order::HOT_CHOCOLATE), 2, true],
         ];
     }
 
@@ -94,4 +79,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         new Order($orderType, $sugarQuantity);
     }
 
+    /**
+     * @test
+     */
+    public function it_generates_an_instruction_for_extra_hot_beverage()
+    {
+        $order = new Order(Order::TEA, 0, true);
+        $this->assertEquals('Th::', $order->getInstruction());
+    }
+    
 }

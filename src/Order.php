@@ -14,10 +14,12 @@ class Order
     const TEA = 'T';
     const COFFEE = 'C';
     const HOT_CHOCOLATE = 'H';
+    const ORANGE_JUICE = 'O';
 
     const TEA_PRICE = 0.4;
     const COFFEE_PRICE = 0.6;
     const HOT_CHOCOLATE_PRICE = 0.5;
+    const ORANGE_JUICE_PRICE = 0.6;
 
     const SUGAR_MAX_QUANTITY = 2;
 
@@ -34,19 +36,25 @@ class Order
         self::TEA => self::TEA_PRICE,
         self::COFFEE => self::COFFEE_PRICE,
         self::HOT_CHOCOLATE => self::HOT_CHOCOLATE_PRICE,
+        self::ORANGE_JUICE => self::ORANGE_JUICE_PRICE,
     ];
+    /**
+     * @var bool
+     */
+    private $extraHot;
 
     /**
      * Order constructor.
      *
      * @param string $type
      * @param int $sugarQuantity
+     * @param bool $extraHot
      */
-    public function __construct($type, $sugarQuantity = 0)
+    public function __construct($type, $sugarQuantity = 0, $extraHot = false)
     {
         Assert::oneOf(
             $type,
-            [self::COFFEE, self::TEA, self::HOT_CHOCOLATE],
+            [self::COFFEE, self::TEA, self::HOT_CHOCOLATE, self::ORANGE_JUICE],
             sprintf('Unknown order type %s', $type)
         );
 
@@ -60,8 +68,9 @@ class Order
         );
 
         $this->type = $type;
-        $this->sugarQuantity = $sugarQuantity;
+        $this->sugarQuantity = $type !== self::ORANGE_JUICE ? $sugarQuantity : 0;
         $this->stick = empty($sugarQuantity) ? false : true;
+        $this->extraHot = $extraHot;
     }
 
     /**
@@ -69,11 +78,13 @@ class Order
      */
     public function getInstruction()
     {
+        $isExtraHot = $this->extraHot ? 'h' : '';
+        
         if ($this->sugarQuantity > 0) {
-            return sprintf('%s:%d:%d', $this->type, $this->sugarQuantity, 0);
+            return sprintf('%s%s:%d:%d', $this->type, $isExtraHot, $this->sugarQuantity, 0);
         }
 
-        return sprintf('%s::', $this->type);
+        return sprintf('%s%s::', $this->type, $isExtraHot);
     }
 
     /**

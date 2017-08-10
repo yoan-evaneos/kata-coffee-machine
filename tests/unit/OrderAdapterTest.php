@@ -25,7 +25,9 @@ class OrderAdapterTest extends \PHPUnit_Framework_TestCase
             [new Order(Order::COFFEE), 0.6, 'C::', 'It should order a coffee without sugar and stick when 0.6€ is given'],
             [new Order(Order::COFFEE), 2, 'C::', 'It should order a coffee without sugar and stick when 0.6€ is given (et on ne rend pas la monnaie)'],
             [new Order(Order::HOT_CHOCOLATE), 0, 'M:0.5', 'It missing 0.5€ when a  hot chocolate is ordered'],
-            [new Order(Order::HOT_CHOCOLATE), 2, 'H::', 'It should order a hot chocolate without sugar and stick when 0.5€ is given (et on ne rend pas la monnaie)\''],
+            [new Order(Order::HOT_CHOCOLATE), 2, 'H::', 'It should order a hot chocolate without sugar and stick when 0.5€ is given (et on ne rend pas la monnaie)'],
+            [new Order(Order::ORANGE_JUICE), 0, 'M:0.6', 'It missing 0.6€ when a super fresh orange juice is ordered'],
+            [new Order(Order::ORANGE_JUICE), 2, 'O::', 'It should order a super fresh orange when 0.6€ is given (et on ne rend pas la monnaie)'],
         ];
     }
 
