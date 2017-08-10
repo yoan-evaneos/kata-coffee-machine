@@ -11,9 +11,14 @@ use Webmozart\Assert\Assert;
  **/
 class Order
 {
-    const COFFEE = 'C';
     const TEA = 'T';
+    const COFFEE = 'C';
     const HOT_CHOCOLATE = 'H';
+
+    const TEA_PRICE = 0.4;
+    const COFFEE_PRICE = 0.6;
+    const HOT_CHOCOLATE_PRICE = 0.5;
+
     const SUGAR_MAX_QUANTITY = 2;
 
     /** @var string */
@@ -24,6 +29,12 @@ class Order
 
     /** @var bool */
     private $stick;
+
+    private $prices = [
+        self::TEA => self::TEA_PRICE,
+        self::COFFEE => self::COFFEE_PRICE,
+        self::HOT_CHOCOLATE => self::HOT_CHOCOLATE_PRICE,
+    ];
 
     /**
      * Order constructor.
@@ -56,12 +67,28 @@ class Order
     /**
      * @return string
      */
-    public function __toString()
+    public function getInstruction()
     {
         if ($this->sugarQuantity > 0) {
             return sprintf('%s:%d:%d', $this->type, $this->sugarQuantity, 0);
         }
 
         return sprintf('%s::', $this->type);
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->prices[$this->type];
     }
 }
