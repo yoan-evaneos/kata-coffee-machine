@@ -1,0 +1,8 @@
+/vendor
+/config/config_*.yml
+/config/config.yml
+/log/
+!/log/.gitkeep
+/cache/
+!/cache/.gitkeep
+tests/output
