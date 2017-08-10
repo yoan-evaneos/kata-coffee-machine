@@ -5,6 +5,7 @@ namespace Kata\Test;
 use Faker\Factory;
 use Faker\Generator;
 use Kata\Order;
+use Kata\OrderValidator;
 
 /**
  * Class DrinkMakerTest
@@ -87,5 +88,16 @@ class CommandSenderTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(\InvalidArgumentException::class, $expectedExceptionMessage);
 
         new Order($orderType, $sugarQuantity);
+    }
+
+    /**
+    * @test
+    */
+    public function it_should_not_generate_order_instruction_if_no_money_given()
+    {
+        $order = new Order(Order::TEA);
+        $this->assertFalse(
+            (new OrderValidator())->isSatisfiedBy($order, 0)
+        );
     }
 }
