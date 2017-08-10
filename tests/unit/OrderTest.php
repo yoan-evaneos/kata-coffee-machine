@@ -2,28 +2,16 @@
 
 namespace Kata\Test;
 
-use Faker\Factory;
-use Faker\Generator;
 use Kata\Order;
+use Kata\OrderValidator;
 
 /**
- * Class DrinkMakerTest
+ * Class OrderTest
  *
  * @package Kata\Test
  **/
-class CommandSenderTest extends \PHPUnit_Framework_TestCase
+class OrderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Generator */
-    private $faker;
-
-    /**
-     * Set up the Unit Test
-     */
-    public function setUp()
-    {
-        $this->faker = Factory::create();
-    }
-
     /**
      * @return array
      */
@@ -61,6 +49,23 @@ class CommandSenderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return array
+     */
+    public function generatePriceTestsData()
+    {
+        return [
+            [new Order(Order::TEA), 0, false],
+            [new Order(Order::TEA), -1, false],
+            [new Order(Order::TEA), 2, true],
+            [new Order(Order::COFFEE), 0, false],
+            [new Order(Order::COFFEE), 0.6, true],
+            [new Order(Order::COFFEE), 2, true],
+            [new Order(Order::HOT_CHOCOLATE), 0, false],
+            [new Order(Order::HOT_CHOCOLATE), 2, true],
+        ];
+    }
+
+    /**
      * @dataProvider generateTestsData
      * @test
      *
@@ -71,16 +76,16 @@ class CommandSenderTest extends \PHPUnit_Framework_TestCase
     public function it_generates_the_correct_instruction_for_a_an_order($orderType, $sugarQuantity, $expected)
     {
         $order = new Order($orderType, $sugarQuantity);
-        $this->assertEquals($expected, (string)$order);
+        $this->assertEquals($expected, $order->getInstruction());
     }
 
     /**
      * @dataProvider generateWrongTestsData
      * @test
      *
-     * @param $orderType
-     * @param $sugarQuantity
-     * @param $expectedExceptionMessage
+     * @param string $orderType
+     * @param int $sugarQuantity
+     * @param string $expectedExceptionMessage
      */
     public function it_throws_exception_when_the_order_is_wrong($orderType, $sugarQuantity, $expectedExceptionMessage)
     {
@@ -88,4 +93,5 @@ class CommandSenderTest extends \PHPUnit_Framework_TestCase
 
         new Order($orderType, $sugarQuantity);
     }
+
 }
