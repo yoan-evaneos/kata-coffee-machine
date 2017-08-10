@@ -38,7 +38,25 @@ class CommandSenderTest extends \PHPUnit_Framework_TestCase
             [Order::TEA, 2, 'T:2:0'],
             [Order::HOT_CHOCOLATE, 0, 'H::'],
             [Order::HOT_CHOCOLATE, 1, 'H:1:0'],
-            [Order::HOT_CHOCOLATE, 2, 'H:2:0']
+            [Order::HOT_CHOCOLATE, 2, 'H:2:0'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function generateWrongTestsData()
+    {
+        return [
+            ['Soup', 0, 'Unknown order type Soup'],
+            [
+                Order::COFFEE,
+                3,
+                sprintf(
+                    'You should not order more than %s sugars ! Think about your diabetes',
+                    Order::SUGAR_MAX_QUANTITY
+                ),
+            ],
         ];
     }
 
@@ -50,19 +68,24 @@ class CommandSenderTest extends \PHPUnit_Framework_TestCase
      * @param int $sugarQuantity
      * @param string $expected
      */
-    public function it_should_generate_the_correct_instruction_for_a_an_order($orderType, $sugarQuantity, $expected)
+    public function it_generates_the_correct_instruction_for_a_an_order($orderType, $sugarQuantity, $expected)
     {
         $order = new Order($orderType, $sugarQuantity);
-        $this->assertEquals($expected, (string) $order);
+        $this->assertEquals($expected, (string)$order);
     }
 
     /**
+     * @dataProvider generateWrongTestsData
      * @test
+     *
+     * @param $orderType
+     * @param $sugarQuantity
+     * @param $expectedExceptionMessage
      */
-    public function it_should_generate_the_correct_instruction_for_a_coffee_with_more_than_two_sugars_order()
+    public function it_throws_exception_when_the_order_is_wrong($orderType, $sugarQuantity, $expectedExceptionMessage)
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->setExpectedException(\InvalidArgumentException::class, $expectedExceptionMessage);
 
-        new Order(Order::COFFEE, 3);
+        new Order($orderType, $sugarQuantity);
     }
 }

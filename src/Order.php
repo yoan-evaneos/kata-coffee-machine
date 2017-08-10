@@ -33,7 +33,21 @@ class Order
      */
     public function __construct($type, $sugarQuantity = 0)
     {
-        Assert::lessThanEq($sugarQuantity, self::SUGAR_MAX_QUANTITY);
+        Assert::oneOf(
+            $type,
+            [self::COFFEE, self::TEA, self::HOT_CHOCOLATE],
+            sprintf('Unknown order type %s', $type)
+        );
+
+        Assert::lessThanEq(
+            $sugarQuantity,
+            self::SUGAR_MAX_QUANTITY,
+            sprintf(
+                'You should not order more than %d sugars ! Think about your diabetes',
+                self::SUGAR_MAX_QUANTITY
+            )
+        );
+
         $this->type = $type;
         $this->sugarQuantity = $sugarQuantity;
         $this->stick = empty($sugarQuantity) ? false : true;
