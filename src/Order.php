@@ -25,6 +25,12 @@ class Order
     /** @var bool */
     private $stick;
 
+    /**
+     * Order constructor.
+     *
+     * @param string $type
+     * @param int $sugarQuantity
+     */
     public function __construct($type, $sugarQuantity = 0)
     {
         Assert::lessThanEq($sugarQuantity, self::SUGAR_MAX_QUANTITY);
@@ -33,6 +39,9 @@ class Order
         $this->stick = empty($sugarQuantity) ? false : true;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         if ($this->sugarQuantity > 0) {
